@@ -8,10 +8,17 @@ const appSrc = 'src/*.js';
 const appDest = 'build';
 const testSrc = ['test/spec/*Spec.js'];
 
-gulp.task('default', ['compile', 'test']);
+gulp.task('default', ['test']);
 
-gulp.task('pre-test', function() {
+gulp.task('compile', function() {
   return gulp.src(appSrc)
+    .pipe(newer(appDest))
+    .pipe(babel({ modules: 'common' }))
+    .pipe(gulp.dest(appDest));
+});
+
+gulp.task('pre-test', ['compile'], function() {
+  return gulp.src(appDest)
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
@@ -20,11 +27,4 @@ gulp.task('test', ['pre-test'], function() {
   return gulp.src(testSrc)
     .pipe(jasmine())
     .pipe(istanbul.writeReports());
-});
-
-gulp.task('compile', function() {
-  return gulp.src(appSrc)
-    .pipe(newer(appDest))
-    .pipe(babel({ modules: 'common' }))
-    .pipe(gulp.dest(appDest));
 });
