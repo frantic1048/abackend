@@ -1,0 +1,22 @@
+{
+  "name": "abackend",
+  "version": "0.0.1",
+  "description": "a web API backend for a homework",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frantic1048/abackend.git"
+  },
+  "keywords": [
+    "express"
+  ],
+  "author": "frantic1048",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frantic1048/abackend/issues"
+  },
+  "homepage": "https://github.com/frantic1048/abackend#readme"
+}
