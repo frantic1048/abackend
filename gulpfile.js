@@ -1,30 +1,92 @@
-const gulp = require('gulp');
-const jasmine = require('gulp-jasmine');
-const babel  = require('gulp-babel');
-const newer = require('gulp-newer');
-const istanbul = require('gulp-istanbul');
+var gulp = require('gulp');
+var jasmine = require('gulp-jasmine');
+var babel  = require('gulp-babel');
+var newer = require('gulp-newer');
+var istanbul = require('gulp-istanbul');
+var runSequence = require('run-sequence');
 
-const appSrc = 'src/*.js';
-const appDest = 'build';
-const testSrc = ['test/spec/*Spec.js'];
-
-gulp.task('default', ['test']);
+var appSrc = 'src/*.js';
+var appDest = 'build/*.js';
+var appDestPath = 'build';
+var testSrc = ['test/spec/*Spec.js'];
+var server = null;
 
 gulp.task('compile', function() {
   return gulp.src(appSrc)
-    .pipe(newer(appDest))
+    .pipe(newer(appDestPath))
     .pipe(babel({ modules: 'common' }))
-    .pipe(gulp.dest(appDest));
+    .pipe(gulp.dest(appDestPath));
 });
 
-gulp.task('pre-test', ['compile'], function() {
+gulp.task('pre-test', function() {
   return gulp.src(appDest)
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', ['pre-test'], function() {
+gulp.task('test', function() {
   return gulp.src(testSrc)
     .pipe(jasmine())
     .pipe(istanbul.writeReports());
+});
+
+gulp.task('serve', function(callback) {
+  server = require('./build/app');
+  callback();
+});
+
+gulp.task('end-serve', function(callback) {
+  if (server) {
+    server.close();
+    server = null;
+  }
+  callback();
+});
+
+gulp.task('watcher-appSrc', function(callback) {
+  runSequence(
+    'end-serve',
+    'compile',
+    'pre-test',
+    'serve',
+    'test',
+    callback
+  );
+});
+
+gulp.task('watcher-testSrc', function(callback) {
+  runSequence(
+    'pre-test',
+    'test',
+    callback
+  );
+});
+
+gulp.task('watch', function(callback) {
+  gulp.watch(appSrc, ['watcher-appSrc']);
+  gulp.watch(testSrc, ['watcher-testSrc']);
+  callback();
+});
+
+// CI
+gulp.task('default', function(callback) {
+  runSequence(
+    'compile',
+    'pre-test',
+    'serve',
+    'test',
+    'end-serve',
+    callback
+  );});
+
+// develop
+gulp.task('dev', function(callback) {
+  runSequence(
+    'compile',
+    'pre-test',
+    'serve',
+    'test',
+    'watch',
+    callback
+  );
 });
