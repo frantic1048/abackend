@@ -2,3 +2,8 @@ language: node_js
 node_js:
   - "4.1"
 script: gulp
+after_script:
+  - codeclimate-test-reporter < coverage/lcov.info
+addons:
+    code_climate:
+        repo_token: 27be646a642c80b94f33debd013d1cb4d32f7bb41f12c08ea7f46532e35764e4

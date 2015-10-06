@@ -1,6 +1,6 @@
 {
   "name": "abackend",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "a web API backend for a homework",
   "main": "build/app.js",
   "scripts": {
@@ -22,6 +22,7 @@
   "devDependencies": {
     "frisby": "^0.8.5",
     "gulp-babel": "^5.2.1",
+    "gulp-istanbul": "^0.10.1",
     "gulp-jasmine": "^2.1.0",
     "gulp-newer": "^0.5.1"
   },
