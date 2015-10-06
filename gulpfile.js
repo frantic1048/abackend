@@ -18,5 +18,5 @@ gulp.task('compile', function() {
   return gulp.src(appSrc)
     .pipe(newer(appDest))
     .pipe(babel({ modules: 'common' }))
-    .pipe(gulp.dest(appDest);
+    .pipe(gulp.dest(appDest));
 });
