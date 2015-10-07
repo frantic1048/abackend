@@ -4,12 +4,19 @@ var babel  = require('gulp-babel');
 var newer = require('gulp-newer');
 var istanbul = require('gulp-istanbul');
 var runSequence = require('run-sequence');
+var eslint = require('gulp-eslint');
 
 var appSrc = 'src/*.js';
 var appDest = 'build/*.js';
 var appDestPath = 'build';
 var testSrc = ['test/spec/*Spec.js'];
 var server = null;
+
+gulp.task('lint', function() {
+  return gulp.src(appSrc)
+    .pipe(eslint({ rulePaths: ['./'] }))
+    .pipe(eslint.format());
+});
 
 gulp.task('compile', function() {
   return gulp.src(appSrc)
@@ -71,7 +78,7 @@ gulp.task('watch', function(callback) {
 // CI
 gulp.task('default', function(callback) {
   runSequence(
-    'compile',
+    ['compile', 'lint'],
     'pre-test',
     'serve',
     'test',
@@ -87,6 +94,15 @@ gulp.task('dev', function(callback) {
     'serve',
     'test',
     'watch',
+    callback
+  );
+});
+
+// run server
+gulp.task('run', function(callback) {
+  runSequence(
+    'compile',
+    'serve',
     callback
   );
 });

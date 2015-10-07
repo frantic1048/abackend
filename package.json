@@ -1,11 +1,12 @@
 {
   "name": "abackend",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "a web API backend for a homework",
   "main": "build/app.js",
   "scripts": {
     "test": "gulp test",
-    "run": "gulp serve"
+    "dev": "gulp dev",
+    "run": "gulp run"
   },
   "repository": {
     "type": "git",
@@ -22,9 +23,9 @@
   "homepage": "https://github.com/frantic1048/abackend#readme",
   "devDependencies": {
     "babel-eslint": "^4.1.3",
-    "eslint": "^1.6.0",
     "frisby": "git+https://github.com/vlucas/frisby.git",
     "gulp-babel": "^5.2.1",
+    "gulp-eslint": "^1.0.0",
     "gulp-istanbul": "^0.10.1",
     "gulp-jasmine": "^2.1.0",
     "gulp-newer": "^0.5.1",
