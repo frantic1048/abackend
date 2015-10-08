@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
 import User from './models/user';
-import config from '../abackend.conf.json';
+import config from '../abackend.conf';
 
 const app = express();
 

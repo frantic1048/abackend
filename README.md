@@ -6,7 +6,9 @@
 # abackend
 一个记事本应用的 Web API 服务端，提供身份验证，同步记事等 API。
 
-# 安装
+# 使用指南
+
+## 安装
 
 安装运行时，前往 [nodejs.org](https://nodejs.org/) 安装 Node.js。
 
@@ -22,11 +24,21 @@ git clone https://github.com/frantic1048/abackend.git
 npm install
 ```
 
+## 运行
+
 执行测试：
 
 ```bash
 gulp
 ```
+
+作为服务器运行：
+
+```bash
+gulp run
+```
+
+## 更新
 
 更新程序：
 

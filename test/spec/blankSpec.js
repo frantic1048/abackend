@@ -1,5 +1,5 @@
 var frisby = require('frisby');
-var port = require('../../abackend.conf.json').serverPort;
+var port = require('../../abackend.conf').serverPort;
 
 describe('blank GET /', function() {
   frisby.create('GET /')
