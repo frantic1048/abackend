@@ -6,8 +6,8 @@ var istanbul = require('gulp-istanbul');
 var runSequence = require('run-sequence');
 var eslint = require('gulp-eslint');
 
-var appSrc = 'src/*.js';
-var appDest = 'build/*.js';
+var appSrc = 'src/**/*.js';
+var appDest = 'build/**/*.js';
 var appDestPath = 'build';
 var testSrc = ['test/spec/*Spec.js'];
 var server = null;
@@ -38,7 +38,7 @@ gulp.task('test', function() {
 });
 
 gulp.task('serve', function(callback) {
-  server = require('./build/app');
+  server = require('./build/server');
   callback();
 });
 

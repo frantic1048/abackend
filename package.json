@@ -1,8 +1,8 @@
 {
   "name": "abackend",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "a web API backend for a homework",
-  "main": "build/app.js",
+  "main": "build/server.js",
   "scripts": {
     "test": "gulp test",
     "dev": "gulp dev",
@@ -31,10 +31,12 @@
     "gulp-newer": "^0.5.1"
   },
   "dependencies": {
+    "body-parser": "^1.14.1",
     "express": "^4.12.3",
     "gulp": "^3.9.0",
-    "mongodb": "^2.0.45",
-    "mongoskin": "^2.0.0",
+    "jsonwebtoken": "^5.4.0",
+    "mongoose": "^4.1.10",
+    "morgan": "^1.6.1",
     "run-sequence": "^1.1.4"
   }
 }

@@ -1,6 +1,13 @@
-const express = require('express');
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
+import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+
+import User from './models/user';
+import config from '../abackend.conf.json';
+
 const app = express();
-const appPort = require('../abackend.conf.json').server_port;
 
 app.get('/', (req, res) => {
   res.send('yahalo! GET!');

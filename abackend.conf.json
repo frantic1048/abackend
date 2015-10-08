@@ -1,3 +1,5 @@
 {
-  "server_port":3999
-} 
+  "serverPort":3999,
+  "databaseSecret": "mahoushoujo!",
+  "databaseURI":"mongodb://localhost:27017"
+}
