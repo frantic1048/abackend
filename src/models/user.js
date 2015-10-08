@@ -1,6 +1,11 @@
-import {Schema, model} from 'mongoose';
+import mongoose from 'mongoose';
 
-export default model('User', new Schema({
+// FIXME: TypeError: Cannot read property 'modelSchemas' of undefined
+const userSchema = new mongoose.Schema({
   name: String,
   password: String,
-}));
+});
+
+const userModel = mongoose.model('User', userSchema);
+
+export default userModel;
