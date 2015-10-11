@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-// FIXME: TypeError: Cannot read property 'modelSchemas' of undefined
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   name: String,
   password: String,
 });

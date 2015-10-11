@@ -31,3 +31,8 @@ build
 
 # dolphin
 .directory
+
+# mongodb files, preserve folder only.
+data/*
+data/mongodb/*
+!data/mongodb
