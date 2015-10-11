@@ -46,4 +46,9 @@ const server = app.listen(config.serverPort, () => {
   console.log(`abackend ponpon at http://localhost:${port}`);
 });
 
+server.on('close', () => {
+  // close database connection on close.
+  mongoose.connection.close();
+});
+
 export default server;
