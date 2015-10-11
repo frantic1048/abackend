@@ -4,23 +4,46 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
+import api from './routes/api/root';
+
 import User from './models/user';
 import config from '../abackend.conf';
 
-const app = express();
+const app = express();  // app instance
+mongoose.connect(config.databaseURI); // connect to database
+app.set('superSecret', config.secret);
+
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.json());
+
+// use morgan to log requests to console
+app.use(morgan('dev'));
+
+app.use('/api', api);
 
 app.get('/', (req, res) => {
-  res.send('yahalo! GET!');
+  res.send(`pong! The API is at http://localhost:${config.serverPort}/api`);
 });
 
-app.get('/api/', (req, res) => {
-  res.send('yahalo! POST!');
+app.get('/setup', (req, res) => {
+  const nico = new User({
+    name: 'Nico',
+    password: 'niconi',
+    admin: true,
+  });
+
+  nico.save((err) => {
+    if (err) throw err;
+
+    console.log(`User ${nico.name} saved successfully!`);
+    res.json({ 0:{success: true } });
+  });
 });
 
 const server = app.listen(config.serverPort, () => {
   const host = server.address().address;
   const port = server.address().port;
-  console.log(`abackend listening at ${host}:${port}`);
+  console.log(`abackend ponpon at http://localhost:${port}`);
 });
 
 export default server;

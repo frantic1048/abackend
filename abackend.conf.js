@@ -1,6 +1,6 @@
 var config = {
   serverPort: 3999,
-  databaseSecret: 'mahoushoujo!',
+  secret: 'mahoushoujo!',
   databaseURI: 'mongodb://localhost:27017',
 };
 
