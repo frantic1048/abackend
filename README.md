@@ -1,6 +1,6 @@
-![codeclimate](https://img.shields.io/codeclimate/github/frantic1048/abackend.svg?style=flat-square)
+[![codeclimate](https://img.shields.io/codeclimate/github/frantic1048/abackend.svg?style=flat-square)](https://codeclimate.com/github/frantic1048/abackend)
 ![coverage](https://img.shields.io/codeclimate/coverage/github/frantic1048/abackend.svg?style=flat-square)
-![build status](https://img.shields.io/travis/frantic1048/abackend.svg?style=flat-square)
+[![build status](https://img.shields.io/travis/frantic1048/abackend.svg?style=flat-square)](https://travis-ci.org/frantic1048/abackend)
 ![david-dm](https://img.shields.io/david/frantic1048/abackend.svg?style=flat-square)
 
 # abackend
@@ -11,6 +11,8 @@
 ## 安装
 
 安装运行时，前往 [nodejs.org](https://nodejs.org/) 安装 Node.js。
+
+前往 [mongodb.org](https://www.mongodb.org/) 安装 MongoDB。
 
 克隆该仓库代码到本地：
 
@@ -25,6 +27,12 @@ npm install
 ```
 
 ## 运行
+
+启动 MongoDB：
+
+```bash
+mongod -f mongodb.conf
+```
 
 执行测试：
 

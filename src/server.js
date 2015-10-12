@@ -36,7 +36,7 @@ app.get('/setup', (req, res) => {
     if (err) throw err;
 
     console.log(`User ${nico.name} saved successfully!`);
-    res.json({ 0:{success: true } });
+    res.json({ 0: {success: true } });
   });
 });
 
