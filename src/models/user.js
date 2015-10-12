@@ -10,6 +10,7 @@ const userSchema = new Schema({
   name: String,
   password: String,
   admin: Boolean,
+  notes: [noteSchema],
 });
 
 const userModel = mongoose.model('User', userSchema);
