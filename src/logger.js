@@ -6,6 +6,7 @@ const logLevels = {
     new transports.Console({
       level: logLevel || 'info',
       colorize: true,
+      prettyPrint: true,
     }),
   ],
   levels: {

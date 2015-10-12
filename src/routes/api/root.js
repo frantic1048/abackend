@@ -1,11 +1,13 @@
 import { Router } from 'express';
 
-import authenticate from './authenticate';
+import registration from './registration';
+import authentication from './authentication';
 import users from './users';
 
 const api = new Router();
 
-api.use('/authenticate', authenticate);
+api.use('/registration', registration);
+api.use('/authentication', authentication);
 api.use('/users', users);
 
 api.get('/', (req, res) => {
