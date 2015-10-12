@@ -35,4 +35,4 @@ build
 # mongodb files, preserve folder only.
 data/*
 data/mongodb/*
-!data/mongodb
+!.gitkeep
