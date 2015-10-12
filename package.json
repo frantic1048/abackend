@@ -1,6 +1,6 @@
 {
   "name": "abackend",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "a web API backend for a homework",
   "main": "build/server.js",
   "scripts": {
@@ -37,6 +37,7 @@
     "jsonwebtoken": "^5.4.0",
     "mongoose": "^4.1.10",
     "morgan": "^1.6.1",
-    "run-sequence": "^1.1.4"
+    "run-sequence": "^1.1.4",
+    "winston": "^1.1.0"
   }
 }

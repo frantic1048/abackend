@@ -1,9 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import morgan from 'morgan';
 import mongoose from 'mongoose';
+import morgan from 'morgan';
 import jwt from 'jsonwebtoken';
 
+import logger from './logger';
 import api from './routes/api/root';
 
 import User from './models/user';
@@ -35,7 +36,7 @@ app.get('/setup', (req, res) => {
   nico.save((err) => {
     if (err) throw err;
 
-    console.log(`User ${nico.name} saved successfully!`);
+    logger.info(`User ${nico.name} saved successfully!`);
     res.json({ 0: {success: true } });
   });
 });
@@ -43,7 +44,7 @@ app.get('/setup', (req, res) => {
 const server = app.listen(config.serverPort, () => {
   const host = server.address().address;
   const port = server.address().port;
-  console.log(`abackend ponpon at http://localhost:${port}`);
+  logger.silly(`abackend ponpon at http://localhost:${port}`);
 });
 
 server.on('close', () => {
