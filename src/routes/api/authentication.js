@@ -35,7 +35,6 @@ const authenticate = new Router();
  */
 
 authenticate.post('/', (req, res) => {
-  logger.info(req.body);
   User.findOne({
     name: req.body.name,
   }, (err, user) => {
@@ -56,7 +55,7 @@ authenticate.post('/', (req, res) => {
         }});
       } else {
         // right password
-        logger.info(`Authentication success for user ${user}`);
+        logger.info(`Authentication success for user ${user.name}`);
         const token = jwt.sign(user, secret, {
           expiresIn: 1440 * 60, // expires in 24 hours
         });
