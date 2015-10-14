@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var jasmine = require('gulp-jasmine');
+var SpecReporter = require('jasmine-spec-reporter');
 var babel  = require('gulp-babel');
 var newer = require('gulp-newer');
 var istanbul = require('gulp-istanbul');
@@ -33,7 +34,7 @@ gulp.task('pre-test', function() {
 
 gulp.task('test', function() {
   return gulp.src(testSrc)
-    .pipe(jasmine())
+    .pipe(jasmine({ reporter: new SpecReporter() }))
     .on('end', function() {
       // automatically close server on test finished
       server.close();

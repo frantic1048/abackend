@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import logger from '../../logger';
-import { User } from '../../models/user';
+import User from '../../models/user';
 
 const registration = new Router();
 
@@ -31,8 +31,6 @@ const registration = new Router();
  */
 
 registration.post('/', (req, res) => {
-  logger.info(req.body);
-
   User.findOne({
     name: req.body.name,
   }, (err, user) => {
@@ -44,16 +42,16 @@ registration.post('/', (req, res) => {
         admin: true,
       });
       newbie.save(() => {
-        logger.info(`new User ${req.body.name} saved successfully!`);
-        res.status(201).json({ args: { success: true }});
+        logger.info(`new user ${req.body.name} saved successfully!`);
+        res.status(201).json({ success: true });
       });
     } else {
       // duplicated username, reject.
       logger.error(`User ${req.body.name} duplicated ! Reject.`);
-      res.status(409).json({ args: {
+      res.status(409).json({
         success: false,
         message: 'Registration rejected. duplicated username.',
-      }});
+      });
     }
   });
 });

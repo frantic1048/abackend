@@ -1,26 +1,39 @@
-var frisby = require('frisby');
+var hippie = require('hippie');
 var port = require('../../abackend.conf').serverPort;
+var baseURL = 'http://localhost:' + port + '/api';
 
-describe('Registration', function() {
-  frisby.create('correct registration')
-    .post('http://localhost:' + port + '/api/registration', {
-      name: 'Nico',
-      password: 'noconi'
-    })
-    .expectStatus(201)
-    .expectJSON('args', {
-      success: true
-    })
-    .toss();
-    
-  frisby.create('duplicated username')
-    .post('http://localhost:' + port + '/api/registration', {
-      name: 'Nico',
-      password: 'noconi'
-    })
-    .expectStatus(409)
-    .expectJSON('args', {
-      success: false
-    })
-    .toss();
+describe('Registration:', function() {
+  it('should register a new user', function(done) {
+    hippie()
+      .json()
+      .send({
+        name: 'Nico',
+        password: 'noconi'
+      })
+      .base(baseURL)
+      .post('/registration')
+      .expectStatus(201)
+      .expectValue('success', true)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
+
+  it('should reject register duplicate user', function(done) {
+    hippie()
+      .json()
+      .send({
+        name: 'Nico',
+        password: 'noconi'
+      })
+      .base(baseURL)
+      .post('/registration')
+      .expectStatus(409)
+      .expectValue('success', false)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
 });

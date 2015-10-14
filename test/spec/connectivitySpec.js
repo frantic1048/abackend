@@ -1,23 +1,16 @@
-var frisby = require('frisby');
+var hippie = require('hippie');
 var port = require('../../abackend.conf').serverPort;
+var baseURL = 'http://localhost:' + port + '/api';
 
-describe('connectivity', function() {
-  frisby.create('GET /api/')
-    .get('http://localhost:' + port + '/api/', {})
-    .expectStatus(200)
-    .toss();
-});
-
-describe('connectivity', function() {
-  frisby.create('GET /api/')
-    .get('http://localhost:' + port + '/api/', {})
-    .expectStatus(200)
-    .toss();
-});
-
-describe('connectivity', function() {
-  frisby.create('GET /api/users')
-    .get('http://localhost:' + port + '/api/users', {})
-    .expectStatus(200)
-    .toss();
+describe('Connect availability:', function() {
+  it('should connect /api successfully', function(done) {
+    hippie()
+      .base(baseURL)
+      .get('/')
+      .expectStatus(200)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
 });

@@ -1,51 +1,115 @@
-var frisby = require('frisby');
+var hippie = require('hippie');
 var port = require('../../abackend.conf').serverPort;
+var baseURL = 'http://localhost:' + port + '/api';
+jasmine.DEFAULT_TIMEOUT_INTERVAL=10000;
 
-describe('Authentication', function() {
-  frisby.create('regist a user')
-    .post('http://localhost:' + port + '/api/registration', {
-      name: 'Regis',
-      password: 'sisosi'
-    })
-    .expectStatus(201)
-    .expectJSON('args', {
-      success: true
-    })
-    .toss();
-
-  frisby.create('authenticate nonexistent username')
-    .post('http://localhost:' + port + '/api/authentication', {
-      name: 'Regis233',
-      password: 'sisosi'
-    })
-    .expectStatus(401)
-    .expectJSON('args', {
-      success: false
-    })
-    .toss();
-
-    frisby.create('authenticate with wrong password')
-      .post('http://localhost:' + port + '/api/authentication', {
-        name: 'Regis',
-        password: 'sisosi2333'
+describe('Authentication:', function() {
+  it('should register a new user', function(done) {
+    hippie()
+      .json()
+      .send({
+        name: 'Auth',
+        password: 'rightpass'
       })
+      .base(baseURL)
+      .post('/registration')
+      .expectStatus(201)
+      .expectValue('success', true)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
+
+  it('should reject with nonexistent username', function(done) {
+    hippie()
+      .json()
+      .send({
+        name: 'utha',
+        password: 'rightpass'
+      })
+      .base(baseURL)
+      .post('/authentication')
       .expectStatus(401)
-      .expectJSON('args', {
-        success: false
-      })
-      .toss();
+      .expectValue('success', false)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+    });
 
-    frisby.create('authenticate with right password and username')
-      .post('http://localhost:' + port + '/api/authentication', {
-        name: 'Regis',
-        password: 'sisosi'
-      })
-      .expectStatus(200)
-      .expectJSON('args', {
-        success: true
-      })
-      .expectJSONTypes('args', {
-        token: String
-      })
-      .toss();
+    it('should reject with wrong password', function(done) {
+      hippie()
+        .json()
+        .send({
+          name: 'Auth',
+          password: 'wrong password'
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(401)
+        .expectValue('success', false)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else done();
+        });
+    });
+
+    it('should get token with right auth data', function(done) {
+      hippie()
+        .json()
+        .send({
+          name: 'Auth',
+          password: 'rightpass'
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            expect(token).toEqual(jasmine.any(String));
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .base(baseURL)
+              .get('/users')
+              .expectStatus(200)
+              .expectValue('success', true)
+              .end(function(err, res, body) {
+                if (err) done.fail(err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should reject with no token', function(done) {
+      hippie()
+        .json()
+        .base(baseURL)
+        .get('/users')
+        .expectStatus(403)
+        .expectValue('success', false)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else done();
+        });
+    });
+
+    it('should reject with wrong token', function(done) {
+      hippie()
+        .json()
+        .header('x-access-token', 'wrong token')
+        .base(baseURL)
+        .get('/users')
+        .expectStatus(401)
+        .expectValue('success', false)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else done();
+        });
+    });
 });

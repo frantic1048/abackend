@@ -1,4 +1,3 @@
-[![codeclimate](https://img.shields.io/codeclimate/github/frantic1048/abackend.svg?style=flat-square)](https://codeclimate.com/github/frantic1048/abackend)
 ![coverage](https://img.shields.io/codeclimate/coverage/github/frantic1048/abackend.svg?style=flat-square)
 [![build status](https://img.shields.io/travis/frantic1048/abackend.svg?style=flat-square)](https://travis-ci.org/frantic1048/abackend)
 ![david-dm](https://img.shields.io/david/frantic1048/abackend.svg?style=flat-square)
@@ -104,26 +103,20 @@ HTTP 状态码：`201 Created`
 
 ```json
 {
-  "args":{
-    "success": true
-  }
+  "success": true
 }
 ```
 
 #### 注册失败：
 
-原因 | HTTP 状态码
-- | -
-用户名已存在 | `409 Conflict`
+- 用户名已存在：`409 Conflict`
 
 响应体（JSON 格式）：
 
 ```json
 {
-  "args":{
-    "success": false,
-    "message": "<error info>"
-  }
+  "success": false,
+  "message": "<error info>"
 }
 ```
 
@@ -156,28 +149,22 @@ HTTP 状态码：`200 OK`
 
 ```json
 {
-  "args": {
-    "success": true,
-    "token": "<access token>"
-  }
+  "success": true,
+  "token": "<access token>"
 }
 ```
 
 #### 验证失败
 
-原因 | HTTP 状态码
-- | -
-用户不存在 | `401 Unauthorized`
-密码错误 | `401 Unauthorized`
+- 用户不存在：`401 Unauthorized`
+- 密码错误：`401 Unauthorized`
 
 响应体（JSON 格式）：
 
 ```json
 {
-  "args": {
-    "success": false,
-    "message": "<error info>"
-  }
+  "success": false,
+  "message": "<error info>"
 }
 ```
 

@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import morgan from 'morgan';
+// import morgan from 'morgan';
 
 import logger from './logger';
 import api from './routes/api/root';
@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
 // use morgan to log requests to console
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.use('/api', api);
 
