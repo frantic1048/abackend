@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import logger from '../../logger';
-import User from '../../models/user';
+import { User } from '../../models/user';
 
 const registration = new Router();
 

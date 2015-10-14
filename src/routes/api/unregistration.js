@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import logger from '../../logger';
-import User from '../../models/user';
 
 const unregistration = new Router();
 
@@ -33,6 +32,7 @@ const unregistration = new Router();
 
 unregistration.delete('/', (req, res) => {
   logger.info(req.body);
+  res.send('you are calling unregistration!');
 });
 
 export default unregistration;

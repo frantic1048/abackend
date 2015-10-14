@@ -34,6 +34,10 @@ gulp.task('pre-test', function() {
 gulp.task('test', function() {
   return gulp.src(testSrc)
     .pipe(jasmine())
+    .on('end', function() {
+      // automatically close server on test finished
+      server.close();
+    })
     .pipe(istanbul.writeReports());
 });
 

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 
 import logger from '../../logger';
-import User from '../../models/user';
+import { User } from '../../models/user';
 import { secret } from '../../../abackend.conf';
 
 const authenticate = new Router();
