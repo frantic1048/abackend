@@ -1,4 +1,5 @@
 # abackend
+[![codeclimate analysis](https://img.shields.io/codeclimate/github/frantic1048/abackend.svg?style=flat-square)](https://codeclimate.com/github/frantic1048/abackend)
 ![coverage](https://img.shields.io/codeclimate/coverage/github/frantic1048/abackend.svg?style=flat-square)
 [![build status](https://img.shields.io/travis/frantic1048/abackend.svg?style=flat-square)](https://travis-ci.org/frantic1048/abackend)
 ![david-dm](https://img.shields.io/david/frantic1048/abackend.svg?style=flat-square)
@@ -87,6 +88,7 @@ POST /api/registration
 
 ```json
 {
+  "id": "<userid>",
   "name": "<username>",
   "password": "<password>"
 }
@@ -109,6 +111,7 @@ HTTP 状态码：`201 Created`
 #### 注册失败：
 
 - 用户名已存在：`409 Conflict`
+- 非法用户名：`422 Unprocessable Entity`
 
 响应体（JSON 格式）：
 
@@ -133,7 +136,7 @@ POST /api/authentication
 
 ```json
 {
-   "name": "<username>",
+   "id": "<userid>",
    "password": "<password>"
 }
 ```

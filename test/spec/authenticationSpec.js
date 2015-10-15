@@ -7,7 +7,7 @@ describe('Authentication:', function() {
     hippie()
       .json()
       .send({
-        name: 'Auth',
+        id: 'Auth',
         password: 'rightpass'
       })
       .base(baseURL)
@@ -24,7 +24,7 @@ describe('Authentication:', function() {
     hippie()
       .json()
       .send({
-        name: 'utha',
+        id: 'utha',
         password: 'rightpass'
       })
       .base(baseURL)
@@ -41,7 +41,7 @@ describe('Authentication:', function() {
       hippie()
         .json()
         .send({
-          name: 'Auth',
+          id: 'Auth',
           password: 'wrong password'
         })
         .base(baseURL)
@@ -80,13 +80,13 @@ describe('Authentication:', function() {
           else done();
         });
     });
-    
+
     describe('Protected APIs', function() {
       it('should get token with right auth data', function(done) {
       hippie()
         .json()
         .send({
-          name: 'Auth',
+          id: 'Auth',
           password: 'rightpass'
         })
         .base(baseURL)
@@ -117,7 +117,7 @@ describe('Authentication:', function() {
       hippie()
         .json()
         .send({
-          name: 'Auth',
+          id: 'Auth',
           password: 'rightpass'
         })
         .base(baseURL)
@@ -143,7 +143,5 @@ describe('Authentication:', function() {
           }
         });
       });
-
     });
-
 });

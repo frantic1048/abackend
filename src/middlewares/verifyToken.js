@@ -15,12 +15,12 @@ function verifyToken(req, res, next) {
         req.decoded = decoded;
         logger.info(`valid token decoded`);
         const reqName = req.url.split('/')[1];
-        if (reqName === decoded.name) {
+        if (reqName === decoded.id) {
           // valid token right path
           next();
         } else {
           // right user accessing wrong path
-          logger.error('token consistency check failed');
+          logger.error('Token consistency check failed');
           return res.status(403).json({
             success: false,
             message: 'Token consistency check failed.',

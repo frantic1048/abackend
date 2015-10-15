@@ -36,13 +36,13 @@ const authenticate = new Router();
 
 authenticate.post('/', (req, res) => {
   User.findOne({
-    name: req.body.name,
+    id: req.body.id,
   }, (err, user) => {
     if (!user) {
-      logger.error(`Authentication failed. User ${req.body.name} does not exist.`);
+      logger.error(`Authentication failed. User ${req.body.id} does not exist.`);
       res.status(401).json({
         success: false,
-        message: `Authentication failed. User ${req.body.name} does not exist.`,
+        message: `Authentication failed. User ${req.body.id} does not exist.`,
       });
     } else if (user) {
       // user exist
@@ -55,7 +55,7 @@ authenticate.post('/', (req, res) => {
         });
       } else {
         // right password
-        logger.info(`Authentication success for user ${user.name}`);
+        logger.info(`Authentication success for user ${user.id}`);
         const token = jwt.sign(user, secret, {
           expiresIn: 1440 * 60, // expires in 24 hours
         });

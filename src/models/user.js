@@ -3,6 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 import { noteSchema } from './note';
 
 const userSchema = new Schema({
+  id: String,
   name: String,
   password: String,
   admin: Boolean,

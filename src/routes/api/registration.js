@@ -30,24 +30,38 @@ const registration = new Router();
  *   }
  */
 
+function isValidUserName(reqId) {
+  const rule = /\w+/;// [A-Za-z0-9_]
+  return rule.test(reqId);
+}
+
 registration.post('/', (req, res) => {
   User.findOne({
-    name: req.body.name,
+    id: req.body.id,
   }, (err, user) => {
     if (!user) {
-      // username not used, create new user
-      const newbie = new User({
-        name: req.body.name,
-        password: req.body.password,
-        admin: true,
-      });
-      newbie.save(() => {
-        logger.info(`new user ${req.body.name} saved successfully!`);
-        res.status(201).json({ success: true });
-      });
+      // username not used
+      // TODO: check username validility
+      if (isValidUserName(req.body.id)) {
+        // valid username, create new user
+        const newbie = new User({
+          id: req.body.id,
+          name: req.body.name || req.body.id,
+          password: req.body.password,
+          admin: true,
+        });
+        newbie.save(() => {
+          logger.info(`new user ${req.body.id} saved successfully!`);
+          res.status(201).json({ success: true });
+        });
+      } else {
+        // invalid username
+        logger.error('reject an invalid userid registration!');
+        res.status(422).json({ success: false });
+      }
     } else {
       // duplicated username, reject.
-      logger.error(`User ${req.body.name} duplicated ! Reject.`);
+      logger.error(`User ${req.body.id} duplicated ! Reject.`);
       res.status(409).json({
         success: false,
         message: 'Registration rejected. duplicated username.',
