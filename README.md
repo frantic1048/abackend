@@ -1,10 +1,9 @@
+# abackend
 ![coverage](https://img.shields.io/codeclimate/coverage/github/frantic1048/abackend.svg?style=flat-square)
 [![build status](https://img.shields.io/travis/frantic1048/abackend.svg?style=flat-square)](https://travis-ci.org/frantic1048/abackend)
 ![david-dm](https://img.shields.io/david/frantic1048/abackend.svg?style=flat-square)
 
-# abackend
-
-一个记事本应用的 Web API 服务端，提供身份验证，同步记事等 API。
+一个记事本应用的 Web API 服务器，提供身份验证，同步记事等 API。
 
 # 使用指南
 

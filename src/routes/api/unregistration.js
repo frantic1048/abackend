@@ -17,13 +17,13 @@ const unregistration = new Router();
  * Response:
  * on Success
  *   status: 204
- *   body.args:
+ *   body:
  *   {
  *      success: true
  *   }
  * on authentication error
  *   status: 401
- *   body.args:
+ *   body:
  *   {
  *      success: false,
  *      message: <error info>

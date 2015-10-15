@@ -38,6 +38,7 @@ gulp.task('test', function() {
     .on('end', function() {
       // automatically close server on test finished
       server.close();
+      server = null;
     })
     .pipe(istanbul.writeReports());
 });

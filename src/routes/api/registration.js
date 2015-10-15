@@ -17,13 +17,13 @@ const registration = new Router();
  * Response:
  * on Success
  *   status: 201
- *   body.args:
+ *   body:
  *   {
  *      success: true
  *   }
  * on duplicated username
  *   status: 409
- *   body.args:
+ *   body:
  *   {
  *      success: false,
  *      message: <error info>

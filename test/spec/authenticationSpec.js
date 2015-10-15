@@ -1,7 +1,6 @@
 var hippie = require('hippie');
 var port = require('../../abackend.conf').serverPort;
 var baseURL = 'http://localhost:' + port + '/api';
-jasmine.DEFAULT_TIMEOUT_INTERVAL=10000;
 
 describe('Authentication:', function() {
   it('should register a new user', function(done) {
