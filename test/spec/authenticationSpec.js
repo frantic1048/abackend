@@ -54,7 +54,8 @@ describe('Authentication:', function() {
         });
     });
 
-    it('should get token with right auth data', function(done) {
+    describe('Protected APIs', function() {
+      it('should get token with right auth data', function(done) {
       hippie()
         .json()
         .send({
@@ -83,6 +84,7 @@ describe('Authentication:', function() {
               });
           }
         });
+      });
     });
 
     it('should reject with no token', function(done) {

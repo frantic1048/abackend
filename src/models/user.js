@@ -1,10 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-const noteSchema = new Schema({
-  title: String,
-  date: Date,
-  body: String,
-});
+import { noteSchema } from './note';
 
 const userSchema = new Schema({
   name: String,
@@ -15,4 +11,4 @@ const userSchema = new Schema({
 
 const User = mongoose.model('User', userSchema);
 
-export default User;
+export { User as default, userSchema };
