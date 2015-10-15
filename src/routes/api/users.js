@@ -7,7 +7,7 @@ const users = new Router();
 // use middle to force token authentication.
 users.use(verifyToken);
 
-users.get('/', (req, res) => {
+users.get('/*', (req, res) => {
   res.status(200).json({
     success: true,
   });

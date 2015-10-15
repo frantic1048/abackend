@@ -11,7 +11,9 @@ api.use('/authentication', authentication);
 api.use('/users', users);
 
 api.get('/', (req, res) => {
-  res.send('pong! this is /api/');
+  res.json({
+    massage: 'pong! this is /api/',
+  });
 });
 
 export default api;
