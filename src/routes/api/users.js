@@ -11,6 +11,6 @@ users.get('/:user_id', verifyToken, (req, res) => {
   });
 });
 
-users.use('/:user_id/notes/*', verifyToken, notes);
+users.use('/:user_id/notes/', verifyToken, notes);
 
 export default users;

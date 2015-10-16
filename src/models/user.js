@@ -1,13 +1,14 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { noteSchema } from './note';
-
 const userSchema = new Schema({
   id: String,
   name: String,
   password: String,
   admin: Boolean,
-  notes: [noteSchema],
+  notes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Note',
+  }],
 });
 
 const User = mongoose.model('User', userSchema);

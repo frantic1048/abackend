@@ -1,13 +1,28 @@
 var hippie = require('hippie');
+var logger = require('../../build/logger');
 var port = require('../../abackend.conf').serverPort;
 var baseURL = 'http://localhost:' + port + '/api';
 
+// =====================
 // Spec Assertion
+// =====================
 var goodUser = {};
-
 goodUser.id = 'Good';
 goodUser.name = 'Good Good';
 goodUser.password = 'Good Password';
+var goodNote = {};
+goodNote.title = 'Good Note';
+goodNote.date = new Date('2015-09-09Z09:00:00');
+goodNote.id = 0;
+goodNote.tags = ['Good Tag1', 'GTag2', 'GTag3'];
+goodNote.body = 'Once upon a time, there was a good man...';
+
+var goodNote2 = {};
+goodNote2.title = 'Good Note 2';
+goodNote2.date = new Date('2015-02-02Z00:02:22');
+goodNote2.id = 1;
+goodNote2.tags = ['Good2',' GTag3'];
+goodNote2.body = 'Twice upon a time, there was another good man...';
 
 // ======================
 // Connect availability
@@ -101,6 +116,7 @@ describe('Registration:', function() {
     });
   });
 });
+
 
 // ======================
 // Authentication
@@ -267,7 +283,103 @@ describe('Functionality:', function() {
         });
     });
 
-    it('should successfully connect to /notes/<any id>', function(done) {
+    it('should successfully create a note', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .send(goodNote)
+              .base(baseURL)
+              .post('/users/' + goodUser.id + '/notes/' + goodNote.id)
+              .expectStatus(201)
+              .expectValue('success', true)
+              .end(function(err, res, body) {
+                logger.info(res.body);
+                if (err) done.fail(err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should successfully create another note', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .send(goodNote2)
+              .base(baseURL)
+              .post('/users/' + goodUser.id + '/notes/' + goodNote2.id)
+              .expectStatus(201)
+              .expectValue('success', true)
+              .end(function(err, res, body) {
+                logger.info(res.body);
+                if (err) done.fail(err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should reject create(POST) exist note', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .send(goodNote)
+              .base(baseURL)
+              .post('/users/' + goodUser.id + '/notes/' + goodNote.id)
+              .expectStatus(409)
+              .expectValue('success', false)
+              .end(function(err, res, body) {
+                logger.info(res.body);
+                if (err) done.fail(err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should return note list', function(done) {
       hippie()
         .json()
         .send({
@@ -286,10 +398,11 @@ describe('Functionality:', function() {
               .json()
               .header('x-access-token', token)
               .base(baseURL)
-              .get('/users/' + goodUser.id + '/notes' + '/any_id')
+              .get('/users/' + goodUser.id + '/notes/')
               .expectStatus(200)
               .expectValue('success', true)
               .end(function(err, res, body) {
+                expect(body.noteList).toEqual(jasmine.arrayContaining([jasmine.any(Object)]));
                 if (err) done.fail(err);
                 done();
               });
