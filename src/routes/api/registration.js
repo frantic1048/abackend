@@ -21,8 +21,15 @@ const registration = new Router();
  *   {
  *      success: true
  *   }
- * on duplicated username
+ * on duplicated id
  *   status: 409
+ *   body:
+ *   {
+ *      success: false,
+ *      message: <error info>
+ *   }
+ * on illegal userid
+ *   status: 422
  *   body:
  *   {
  *      success: false,
@@ -30,7 +37,7 @@ const registration = new Router();
  *   }
  */
 
-function isValidUserName(reqId) {
+function isValidUserId(reqId) {
   const rule = /\w+/;// [A-Za-z0-9_]
   return rule.test(reqId);
 }
@@ -40,10 +47,9 @@ registration.post('/', (req, res) => {
     id: req.body.id,
   }, (err, user) => {
     if (!user) {
-      // username not used
-      // TODO: check username validility
-      if (isValidUserName(req.body.id)) {
-        // valid username, create new user
+      // userid not used
+      if (isValidUserId(req.body.id)) {
+        // valid userid, create new user
         const newbie = new User({
           id: req.body.id,
           name: req.body.name || req.body.id,
@@ -57,14 +63,17 @@ registration.post('/', (req, res) => {
       } else {
         // invalid username
         logger.error('reject an invalid userid registration!');
-        res.status(422).json({ success: false });
+        res.status(422).json({
+          success: false,
+          message: 'Registration rejected. invalid userid',
+        });
       }
     } else {
       // duplicated username, reject.
       logger.error(`User ${req.body.id} duplicated ! Reject.`);
       res.status(409).json({
         success: false,
-        message: 'Registration rejected. duplicated username.',
+        message: 'Registration rejected. duplicated userid.',
       });
     }
   });

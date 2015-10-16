@@ -13,9 +13,9 @@ function verifyToken(req, res, next) {
       if (!err) {
         // valid token
         req.decoded = decoded;
+        const reqId = req.params.user_id;
         logger.info(`valid token decoded`);
-        const reqName = req.url.split('/')[1];
-        if (reqName === decoded.id) {
+        if (reqId === decoded.id) {
           // valid token right path
           next();
         } else {
