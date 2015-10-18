@@ -16,13 +16,14 @@ goodNote.date = new Date('2015-09-09Z09:00:00');
 goodNote.id = 0;
 goodNote.tags = ['Good Tag1', 'GTag2', 'GTag3'];
 goodNote.body = 'Once upon a time, there was a good man...';
-
 var goodNote2 = {};
 goodNote2.title = 'Good Note 2';
 goodNote2.date = new Date('2015-02-02Z00:02:22');
 goodNote2.id = 1;
 goodNote2.tags = ['Good2',' GTag3'];
 goodNote2.body = 'Twice upon a time, there was another good man...';
+var badNote = {};
+badNote.id = 99999;
 
 // ======================
 // Connect availability
@@ -403,6 +404,67 @@ describe('Functionality:', function() {
               .expectValue('success', true)
               .end(function(err, res, body) {
                 expect(body.noteList).toEqual(jasmine.arrayContaining([jasmine.any(Object)]));
+                if (err) done.fail(err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should return a note', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .base(baseURL)
+              .get('/users/' + goodUser.id + '/notes/' + goodNote.id)
+              .expectStatus(200)
+              .expectValue('success', true)
+              .end(function(err, res, body) {
+                expect(body.note).toEqual(jasmine.any(Object));
+                if (err) done.fail(err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should reject nonexistent note req', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .base(baseURL)
+              .get('/users/' + goodUser.id + '/notes/' + badNote.id)
+              .expectStatus(404)
+              .expectValue('success', false)
+              .end(function(err, res, body) {
                 if (err) done.fail(err);
                 done();
               });

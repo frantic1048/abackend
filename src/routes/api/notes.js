@@ -31,9 +31,9 @@ notes.post('/:note_id', (req, res) => {
   Note.findOne({
     _owner: owner,
     id: noteId,
-  }, (err, note) => {
-    if (!note) {
-      // nodeid avaialed for user
+  }, (err, _note) => {
+    if (!_note) {
+      // noteid avaialed for user
       const newNote = new Note({
         _owner: owner,
         id: noteId,
@@ -48,10 +48,33 @@ notes.post('/:note_id', (req, res) => {
         });
       });
     } else {
-      // exist note
+      // exist note, reject creating
       res.status(409).json({
         success: false,
         message: 'noteid exist!',
+      });
+    }
+  });
+});
+
+notes.get('/:note_id', (req, res) => {
+  const owner = req.decoded.id;
+  const noteId = req.params.note_id;
+  Note.findOne({
+    _owner: owner,
+    id: noteId,
+  }, (err, _note) => {
+    if (!_note) {
+      // note does not exist
+      res.status(404).json({
+        success: false,
+        message: 'Note does not exist.',
+      });
+    } else {
+      // exist note
+      res.status(200).json({
+        success: true,
+        note: _note,
       });
     }
   });

@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 const noteSchema = new Schema({
   _owner: {
     type: String,
-    ref: 'Person',
+    ref: 'User',
   },
   id: Number,
   title: String,
