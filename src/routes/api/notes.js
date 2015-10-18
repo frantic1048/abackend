@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import logger from '../../logger';
 import Note from '../../models/note';
 
 const notes = new Router();
@@ -54,6 +55,25 @@ notes.post('/:note_id', (req, res) => {
         message: 'noteid exist!',
       });
     }
+  });
+});
+
+notes.patch('/:note_id', (req, res) => {
+  const owner = req.decoded.id;
+  const noteId = req.params.note_id;
+  Note.update({
+    _owner: owner,
+    id: noteId,
+  }
+  , { $set: req.body}
+  , (err) => {
+    if (!err) {
+      res.status(200).json({
+        success: true,
+        message: 'Update success!',
+      });
+    }
+    // TODO: May need more err handling here
   });
 });
 

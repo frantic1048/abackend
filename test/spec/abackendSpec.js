@@ -471,5 +471,47 @@ describe('Functionality:', function() {
           }
         });
     });
+
+    it('should update note body', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .base(baseURL)
+              .send({
+                body: goodNote2.body
+              })
+              .patch('/users/' + goodUser.id + '/notes/' + goodNote.id)
+              .expectStatus(200)
+              .expectValue('success', true)
+              .end(function(err, res, body) {
+                if (err) done.fail(err);
+                hippie()
+                  .json()
+                  .header('x-access-token', token)
+                  .base(baseURL)
+                  .get('/users/' + goodUser.id + '/notes/' + goodNote.id)
+                  .end(function(err, res, body) {
+                    if (err) done.fail(err);
+                    expect(body.note['body']).toBe(goodNote2['body']);
+                    done();
+                  });
+              });
+          }
+        });
+    });
   });
 });
