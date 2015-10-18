@@ -308,7 +308,6 @@ describe('Functionality:', function() {
               .expectStatus(201)
               .expectValue('success', true)
               .end(function(err, res, body) {
-                logger.info(res.body);
                 if (err) done.fail(err);
                 done();
               });
@@ -504,11 +503,40 @@ describe('Functionality:', function() {
                   .header('x-access-token', token)
                   .base(baseURL)
                   .get('/users/' + goodUser.id + '/notes/' + goodNote.id)
+                  .expectStatus(200)
                   .end(function(err, res, body) {
                     if (err) done.fail(err);
                     expect(body.note['body']).toBe(goodNote2['body']);
                     done();
                   });
+              });
+          }
+        });
+    });
+
+    it('should delete a note', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .header('x-access-token', token)
+              .base(baseURL)
+              .del('/users/' + goodUser.id + '/notes/' + goodNote2.id)
+              .expectStatus(204)
+              .end(function(err, res, body) {
+                if (err) done.fail(err);
+                done();
               });
           }
         });

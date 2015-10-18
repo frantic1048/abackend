@@ -77,6 +77,22 @@ notes.patch('/:note_id', (req, res) => {
   });
 });
 
+notes.delete('/:note_id', (req, res) => {
+  const owner = req.decoded.id;
+  const noteId = req.params.note_id;
+  Note.remove({
+    _owner: owner,
+    id: noteId,
+  }
+  , (err) => {
+    if (!err) {
+      logger.warn('deleted a Note');
+      res.status(204).send();
+    }
+    // TODO: May need more err handling here
+  });
+});
+
 notes.get('/:note_id', (req, res) => {
   const owner = req.decoded.id;
   const noteId = req.params.note_id;
