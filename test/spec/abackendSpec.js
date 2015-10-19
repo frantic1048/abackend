@@ -149,28 +149,78 @@ describe('Registration:', function() {
   });
 
   describe('Change password', function() {
-    it('should change password for user', function(done) {
-      pending('not implemented');
+    it('should reject with bad password', function(done) {
       hippie()
         .json()
         .send({
+          id: goodUser2.id,
           password: goodUser2.password,
-          newPassword: goodUser2.newPassword,
         })
         .base(baseURL)
-        .patch('/users/' + goodUser2.id)
+        .post('/authentication')
         .expectStatus(200)
         .expectValue('success', true)
         .end(function(err, res, body) {
           if (err) done.fail(err);
-          done();
+          else {
+            var token = body.token;
+            expect(token).toEqual(jasmine.any(String));
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .send({
+                password: 'wrongggg',
+              })
+              .base(baseURL)
+              .patch('/users/' + goodUser2.id)
+              .expectStatus(401)
+              .expectValue('success', false)
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should accept with good old password', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser2.id,
+          password: goodUser2.password,
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            expect(token).toEqual(jasmine.any(String));
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .send({
+                password: goodUser2.password,
+                newPassword: goodUser2.newPassword,
+              })
+              .base(baseURL)
+              .patch('/users/' + goodUser2.id)
+              .expectStatus(200)
+              .expectValue('success', true)
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
+                done();
+              });
+          }
         });
     });
   });
 
   describe('Unregistration', function() {
-    it('should unregister a user', function(done) {
-      pending('not implemented');
+    it('should reject req with bad password', function(done) {
       hippie()
         .json()
         .send({
@@ -178,11 +228,62 @@ describe('Registration:', function() {
           password: goodUser2.newPassword,
         })
         .base(baseURL)
-        .del('/users/' + goodUser2.id)
-        .expectStatus(204)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
         .end(function(err, res, body) {
           if (err) done.fail(err);
-          done();
+          else {
+            var token = body.token;
+            expect(token).toEqual(jasmine.any(String));
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .send({
+                password: 'wronggggg',
+              })
+              .base(baseURL)
+              .del('/users/' + goodUser2.id)
+              .expectStatus(401)
+              .expectValue('success', false)
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
+                done();
+              });
+          }
+        });
+    });
+
+    it('should accept req with good password', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser2.id,
+          password: goodUser2.newPassword,
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            expect(token).toEqual(jasmine.any(String));
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .send({
+                password: goodUser2.newPassword,
+              })
+              .base(baseURL)
+              .del('/users/' + goodUser2.id)
+              .expectStatus(204)
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
+                done();
+              });
+          }
         });
     });
   });
