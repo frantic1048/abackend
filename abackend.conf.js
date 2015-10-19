@@ -1,3 +1,7 @@
+/* eslint-env node, jasmine */
+/* eslint-disable no-var, prefer-const, func-names */
+/* eslint-disable ecmaFeatures */
+
 var config = {
   serverPort: 3999,
   databaseURI: 'mongodb://localhost:27017',

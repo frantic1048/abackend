@@ -1,3 +1,7 @@
+/* eslint-env node, jasmine */
+/* eslint-disable no-var, prefer-const, vars-on-top, func-names, no-unused-vars */
+/* eslint-disable ecmaFeatures */
+
 var hippie = require('hippie');
 var logger = require('../../build/logger');
 var port = require('../../abackend.conf').serverPort;
@@ -28,7 +32,7 @@ var goodNote2 = {};
 goodNote2.title = 'Good Note 2';
 goodNote2.date = new Date('2015-02-02Z00:02:22');
 goodNote2.id = 1;
-goodNote2.tags = ['Good2',' GTag3'];
+goodNote2.tags = ['Good2', ' GTag3'];
 goodNote2.body = 'Twice upon a time, there was another good man...';
 
 var badNote = {};
@@ -60,7 +64,7 @@ describe('Registration:', function() {
       .send({
         id: goodUser.id,
         name: goodUser.name,
-        password: goodUser.password
+        password: goodUser.password,
       })
       .base(baseURL)
       .post('/registration')
@@ -78,7 +82,7 @@ describe('Registration:', function() {
       .send({
         id: goodUser2.id,
         name: goodUser2.name,
-        password: goodUser2.password
+        password: goodUser2.password,
       })
       .base(baseURL)
       .post('/registration')
@@ -97,7 +101,7 @@ describe('Registration:', function() {
         .send({
           id: goodUser.id,
           name: goodUser.name,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/registration')
@@ -114,7 +118,7 @@ describe('Registration:', function() {
         .json()
         .send({
           id: '',
-          password: 'noconi'
+          password: 'noconi',
         })
         .base(baseURL)
         .post('/registration')
@@ -131,7 +135,7 @@ describe('Registration:', function() {
         .json()
         .send({
           id: '!',
-          password: 'noconi'
+          password: 'noconi',
         })
         .base(baseURL)
         .post('/registration')
@@ -151,12 +155,12 @@ describe('Registration:', function() {
         .json()
         .send({
           password: goodUser2.password,
-          newPassword: goodUser2.newPassword
+          newPassword: goodUser2.newPassword,
         })
         .base(baseURL)
         .patch('/users/' + goodUser2.id)
         .expectStatus(200)
-        .expectValue('success',true)
+        .expectValue('success', true)
         .end(function(err, res, body) {
           if (err) done.fail(err);
           done();
@@ -171,7 +175,7 @@ describe('Registration:', function() {
         .json()
         .send({
           id: goodUser2.id,
-          password: goodUser2.newPassword
+          password: goodUser2.newPassword,
         })
         .base(baseURL)
         .del('/users/' + goodUser2.id)
@@ -194,7 +198,7 @@ describe('Authentication:', function() {
       .json()
       .send({
         id: 'nonexistent',
-        password: 'rightpass'
+        password: 'rightpass',
       })
       .base(baseURL)
       .post('/authentication')
@@ -204,59 +208,59 @@ describe('Authentication:', function() {
         if (err) done.fail(err);
         else done();
       });
-    });
+  });
 
-    it('should reject wrong password', function(done) {
+  it('should reject wrong password', function(done) {
+    hippie()
+      .json()
+      .send({
+        id: goodUser.id,
+        password: 'wrong password',
+      })
+      .base(baseURL)
+      .post('/authentication')
+      .expectStatus(401)
+      .expectValue('success', false)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
+
+  it('should reject empty token', function(done) {
+    hippie()
+      .json()
+      .base(baseURL + '/users')
+      .get('/' + goodUser.id)
+      .expectStatus(403)
+      .expectValue('success', false)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
+
+  it('should reject wrong token', function(done) {
+    hippie()
+      .json()
+      .header('x-access-token', 'wrong token')
+      .base(baseURL + '/users')
+      .get('/' + goodUser.id)
+      .expectStatus(401)
+      .expectValue('success', false)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
+
+  describe('Protected API Guard', function() {
+    it('should get token with good auth data', function(done) {
       hippie()
         .json()
         .send({
           id: goodUser.id,
-          password: 'wrong password'
-        })
-        .base(baseURL)
-        .post('/authentication')
-        .expectStatus(401)
-        .expectValue('success', false)
-        .end(function(err, res, body) {
-          if (err) done.fail(err);
-          else done();
-        });
-    });
-
-    it('should reject empty token', function(done) {
-      hippie()
-        .json()
-        .base(baseURL + '/users')
-        .get('/' + goodUser.id)
-        .expectStatus(403)
-        .expectValue('success', false)
-        .end(function(err, res, body) {
-          if (err) done.fail(err);
-          else done();
-        });
-    });
-
-    it('should reject wrong token', function(done) {
-      hippie()
-        .json()
-        .header('x-access-token', 'wrong token')
-        .base(baseURL + '/users')
-        .get('/' + goodUser.id)
-        .expectStatus(401)
-        .expectValue('success', false)
-        .end(function(err, res, body) {
-          if (err) done.fail(err);
-          else done();
-        });
-    });
-
-    describe('Protected API Guard', function() {
-      it('should get token with good auth data', function(done) {
-      hippie()
-        .json()
-        .send({
-          id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -274,44 +278,44 @@ describe('Authentication:', function() {
               .get('/users/' + goodUser.id)
               .expectStatus(200)
               .expectValue('success', true)
-              .end(function(err, res, body) {
-                if (err) throw err;
+              .end(function(_err, _res, _body) {
+                if (_err) throw _err;
                 done();
               });
           }
         });
-      });
-
-      it('should reject bad userid-token pairing', function(done) {
-        hippie()
-          .json()
-          .send({
-            id: goodUser.id,
-            password: goodUser.password
-          })
-          .base(baseURL)
-          .post('/authentication')
-          .expectStatus(200)
-          .expectValue('success', true)
-          .end(function(err, res, body) {
-            if (err) done.fail(err);
-            else {
-              var token = body.token;
-              hippie()
-                .json()
-                .header('x-access-token', token)
-                .base(baseURL)
-                .get('/users/' + 'nonono')
-                .expectStatus(403)
-                .expectValue('success', false)
-                .end(function(err, res, body) {
-                  if (err) done.fail(err);
-                  done();
-                });
-            }
-          });
-      });
     });
+
+    it('should reject bad userid-token pairing', function(done) {
+      hippie()
+        .json()
+        .send({
+          id: goodUser.id,
+          password: goodUser.password,
+        })
+        .base(baseURL)
+        .post('/authentication')
+        .expectStatus(200)
+        .expectValue('success', true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          else {
+            var token = body.token;
+            hippie()
+              .json()
+              .header('x-access-token', token)
+              .base(baseURL)
+              .get('/users/' + 'nonono')
+              .expectStatus(403)
+              .expectValue('success', false)
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
+                done();
+              });
+          }
+        });
+    });
+  });
 });
 
 
@@ -325,7 +329,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -342,8 +346,8 @@ describe('Functionality:', function() {
               .get('/users/' + goodUser.id + '/notes/')
               .expectStatus(200)
               .expectValue('success', true)
-              .end(function(err, res, body) {
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
                 done();
               });
           }
@@ -355,7 +359,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -373,8 +377,8 @@ describe('Functionality:', function() {
               .post('/users/' + goodUser.id + '/notes/' + goodNote.id)
               .expectStatus(201)
               .expectValue('success', true)
-              .end(function(err, res, body) {
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
                 done();
               });
           }
@@ -386,7 +390,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -404,9 +408,9 @@ describe('Functionality:', function() {
               .post('/users/' + goodUser.id + '/notes/' + goodNote2.id)
               .expectStatus(201)
               .expectValue('success', true)
-              .end(function(err, res, body) {
-                logger.info(res.body);
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                logger.info(res._body);
+                if (_err) done.fail(_err);
                 done();
               });
           }
@@ -418,7 +422,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -436,9 +440,9 @@ describe('Functionality:', function() {
               .post('/users/' + goodUser.id + '/notes/' + goodNote.id)
               .expectStatus(409)
               .expectValue('success', false)
-              .end(function(err, res, body) {
-                logger.info(res.body);
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                logger.info(res._body);
+                if (_err) done.fail(_err);
                 done();
               });
           }
@@ -450,7 +454,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -467,9 +471,9 @@ describe('Functionality:', function() {
               .get('/users/' + goodUser.id + '/notes/')
               .expectStatus(200)
               .expectValue('success', true)
-              .end(function(err, res, body) {
-                expect(body.noteList).toEqual(jasmine.arrayContaining([jasmine.any(Object)]));
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                expect(_body.noteList).toEqual(jasmine.arrayContaining([jasmine.any(Object)]));
+                if (_err) done.fail(_err);
                 done();
               });
           }
@@ -481,7 +485,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -498,9 +502,9 @@ describe('Functionality:', function() {
               .get('/users/' + goodUser.id + '/notes/' + goodNote.id)
               .expectStatus(200)
               .expectValue('success', true)
-              .end(function(err, res, body) {
-                expect(body.note).toEqual(jasmine.any(Object));
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                expect(_body.note).toEqual(jasmine.any(Object));
+                if (_err) done.fail(_err);
                 done();
               });
           }
@@ -512,7 +516,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -529,8 +533,8 @@ describe('Functionality:', function() {
               .get('/users/' + goodUser.id + '/notes/' + badNote.id)
               .expectStatus(404)
               .expectValue('success', false)
-              .end(function(err, res, body) {
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
                 done();
               });
           }
@@ -542,7 +546,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -557,22 +561,22 @@ describe('Functionality:', function() {
               .header('x-access-token', token)
               .base(baseURL)
               .send({
-                body: goodNote2.body
+                body: goodNote2.body,
               })
               .patch('/users/' + goodUser.id + '/notes/' + goodNote.id)
               .expectStatus(200)
               .expectValue('success', true)
-              .end(function(err, res, body) {
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
                 hippie()
                   .json()
                   .header('x-access-token', token)
                   .base(baseURL)
                   .get('/users/' + goodUser.id + '/notes/' + goodNote.id)
                   .expectStatus(200)
-                  .end(function(err, res, body) {
-                    if (err) done.fail(err);
-                    expect(body.note['body']).toBe(goodNote2['body']);
+                  .end(function(__err, __res, __body) {
+                    if (__err) done.fail(__err);
+                    expect(__body.note.body).toBe(goodNote2.body);
                     done();
                   });
               });
@@ -585,7 +589,7 @@ describe('Functionality:', function() {
         .json()
         .send({
           id: goodUser.id,
-          password: goodUser.password
+          password: goodUser.password,
         })
         .base(baseURL)
         .post('/authentication')
@@ -600,8 +604,8 @@ describe('Functionality:', function() {
               .base(baseURL)
               .del('/users/' + goodUser.id + '/notes/' + goodNote2.id)
               .expectStatus(204)
-              .end(function(err, res, body) {
-                if (err) done.fail(err);
+              .end(function(_err, _res, _body) {
+                if (_err) done.fail(_err);
                 done();
               });
           }

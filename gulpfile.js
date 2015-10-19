@@ -1,3 +1,7 @@
+/* eslint-env node, jasmine */
+/* eslint-disable no-var, prefer-const, func-names */
+/* eslint-disable ecmaFeatures */
+
 var gulp = require('gulp');
 var jasmine = require('gulp-jasmine');
 var SpecReporter = require('jasmine-spec-reporter');
@@ -10,11 +14,12 @@ var eslint = require('gulp-eslint');
 var appSrc = 'src/**/*.js';
 var appDest = 'build/**/*.js';
 var appDestPath = 'build';
+var lintSrc = [appSrc, 'test/spec/*Spec.js', 'gulpfile.js', 'abackend.conf.js'];
 var testSrc = ['test/spec/*Spec.js'];
 var server = null;
 
 gulp.task('lint', function() {
-  return gulp.src(appSrc)
+  return gulp.src(lintSrc)
     .pipe(eslint({ rulePaths: ['./'] }))
     .pipe(eslint.format());
 });
