@@ -30,6 +30,9 @@ engines:
 ratings:
   paths:
   - src/**/*.js
+  - test/spec/*Spec.js
+  - gulpfile.js
+  - abackend.conf.js
 #   - lib/**
 #   - "**.rb"
 #   - "**.go"
