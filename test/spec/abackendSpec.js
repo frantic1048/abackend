@@ -10,18 +10,27 @@ var goodUser = {};
 goodUser.id = 'Good';
 goodUser.name = 'Good Good';
 goodUser.password = 'Good Password';
+
+var goodUser2 = {};
+goodUser2.id = 'Good2';
+goodUser2.name = 'Good Good2';
+goodUser2.password = 'Good Password2';
+goodUser2.newPassword = 'Good New Password';
+
 var goodNote = {};
 goodNote.title = 'Good Note';
 goodNote.date = new Date('2015-09-09Z09:00:00');
 goodNote.id = 0;
 goodNote.tags = ['Good Tag1', 'GTag2', 'GTag3'];
 goodNote.body = 'Once upon a time, there was a good man...';
+
 var goodNote2 = {};
 goodNote2.title = 'Good Note 2';
 goodNote2.date = new Date('2015-02-02Z00:02:22');
 goodNote2.id = 1;
 goodNote2.tags = ['Good2',' GTag3'];
 goodNote2.body = 'Twice upon a time, there was another good man...';
+
 var badNote = {};
 badNote.id = 99999;
 
@@ -52,6 +61,24 @@ describe('Registration:', function() {
         id: goodUser.id,
         name: goodUser.name,
         password: goodUser.password
+      })
+      .base(baseURL)
+      .post('/registration')
+      .expectStatus(201)
+      .expectValue('success', true)
+      .end(function(err, res, body) {
+        if (err) done.fail(err);
+        else done();
+      });
+  });
+
+  it('should register another good user', function(done) {
+    hippie()
+      .json()
+      .send({
+        id: goodUser2.id,
+        name: goodUser2.name,
+        password: goodUser2.password
       })
       .base(baseURL)
       .post('/registration')
@@ -113,6 +140,45 @@ describe('Registration:', function() {
         .end(function(err, res, body) {
           if (err) done.fail(err);
           else done();
+        });
+    });
+  });
+
+  describe('Change password', function() {
+    it('should change password for user', function(done) {
+      pending('not implemented');
+      hippie()
+        .json()
+        .send({
+          password: goodUser2.password,
+          newPassword: goodUser2.newPassword
+        })
+        .base(baseURL)
+        .patch('/users/' + goodUser2.id)
+        .expectStatus(200)
+        .expectValue('success',true)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          done();
+        });
+    });
+  });
+
+  describe('Unregistration', function() {
+    it('should unregister a user', function(done) {
+      pending('not implemented');
+      hippie()
+        .json()
+        .send({
+          id: goodUser2.id,
+          password: goodUser2.newPassword
+        })
+        .base(baseURL)
+        .del('/users/' + goodUser2.id)
+        .expectStatus(204)
+        .end(function(err, res, body) {
+          if (err) done.fail(err);
+          done();
         });
     });
   });
