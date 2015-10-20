@@ -8,6 +8,7 @@ var config = {
   logLevel: Infinity, // log levels: silly, info, warn, error
   secret: 'mahoushoujo!', // secret for JWT
   dev: true, // true: automatically drop database on server startup
+  magic: 'joka!joka!!jokaaaaa!!!', // salt for password hashing
 };
 
 module.exports = config;
