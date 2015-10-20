@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import hash from '../../hash';
 import logger from '../../logger';
 import User from '../../models/user';
 
@@ -53,7 +54,7 @@ registration.post('/', (req, res) => {
         const newbie = new User({
           id: req.body.id,
           name: req.body.name || req.body.id,
-          password: req.body.password,
+          password: hash(`${req.body.id}${req.body.password}`),
           admin: true,
         });
         newbie.save(() => {

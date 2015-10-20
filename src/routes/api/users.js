@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import logger from '../../logger';
+import hash from '../../hash';
 import User from '../../models/user';
 import notes from './notes';
 import verifyToken from '../../middlewares/verifyToken';
@@ -16,8 +17,8 @@ users.get('/:user_id', verifyToken, (req, res) => {
 users.patch('/:user_id', verifyToken, (req, res) => {
   // update password
   const userId = req.params.user_id;
-  const oldPassword = req.body.password;
-  const newPassword = req.body.newPassword;
+  const oldPassword = hash(`${userId}${req.body.password}`);
+  const newPassword = hash(`${userId}${req.body.newPassword}`);
   User.findOne({
     id: userId,
   }, (err, user) => {
@@ -45,7 +46,7 @@ users.delete('/:user_id', verifyToken, (req, res) => {
   logger.info(req.params);
   logger.info(req.body.password);
   const userId = req.params.user_id;
-  const password = req.body.password;
+  const password = hash(`${userId}${req.body.password}`);
   User.findOne({
     id: userId,
   }, (err, user) => {
