@@ -1,46 +1,42 @@
-/* eslint-env node, jasmine */
-/* eslint-disable no-var, prefer-const, func-names */
-/* eslint-disable ecmaFeatures */
+import gulp from 'gulp';
+import jasmine from 'gulp-jasmine';
+import SpecReporter from 'jasmine-spec-reporter';
+import babel  from 'gulp-babel';
+import newer from 'gulp-newer';
+import istanbul from 'gulp-istanbul';
+import runSequence from 'run-sequence';
+import eslint from 'gulp-eslint';
 
-var gulp = require('gulp');
-var jasmine = require('gulp-jasmine');
-var SpecReporter = require('jasmine-spec-reporter');
-var babel  = require('gulp-babel');
-var newer = require('gulp-newer');
-var istanbul = require('gulp-istanbul');
-var runSequence = require('run-sequence');
-var eslint = require('gulp-eslint');
+const appSrc = 'src/**/*.js';
+const appDest = 'build/**/*.js';
+const appDestPath = 'build';
+const lintSrc = [appSrc, 'test/spec/*Spec.js', 'gulpfile.js', 'abackend.conf.js'];
+const testSrc = ['test/spec/*Spec.js'];
+let server = null;
 
-var appSrc = 'src/**/*.js';
-var appDest = 'build/**/*.js';
-var appDestPath = 'build';
-var lintSrc = [appSrc, 'test/spec/*Spec.js', 'gulpfile.js', 'abackend.conf.js'];
-var testSrc = ['test/spec/*Spec.js'];
-var server = null;
-
-gulp.task('lint', function() {
+gulp.task('lint', () => {
   return gulp.src(lintSrc)
     .pipe(eslint({ rulePaths: ['./'] }))
     .pipe(eslint.format());
 });
 
-gulp.task('compile', function() {
+gulp.task('compile', () => {
   return gulp.src(appSrc)
     .pipe(newer(appDestPath))
     .pipe(babel({ modules: 'common' }))
     .pipe(gulp.dest(appDestPath));
 });
 
-gulp.task('pre-test', function() {
+gulp.task('pre-test', () => {
   return gulp.src(appDest)
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', function() {
+gulp.task('test', () => {
   return gulp.src(testSrc)
     .pipe(jasmine({ reporter: new SpecReporter() }))
-    .on('end', function() {
+    .on('end', () => {
       // automatically close server on test finished
       server.close();
       server = null;
@@ -48,12 +44,12 @@ gulp.task('test', function() {
     .pipe(istanbul.writeReports());
 });
 
-gulp.task('serve', function(callback) {
+gulp.task('serve', (callback) => {
   server = require('./build/server');
   callback();
 });
 
-gulp.task('end-serve', function(callback) {
+gulp.task('end-serve', (callback) => {
   if (server) {
     server.close();
     server = null;
@@ -61,7 +57,7 @@ gulp.task('end-serve', function(callback) {
   callback();
 });
 
-gulp.task('watcher-appSrc', function(callback) {
+gulp.task('watcher-appSrc', (callback) => {
   runSequence(
     'end-serve',
     'compile',
@@ -72,7 +68,7 @@ gulp.task('watcher-appSrc', function(callback) {
   );
 });
 
-gulp.task('watcher-testSrc', function(callback) {
+gulp.task('watcher-testSrc', (callback) => {
   runSequence(
     'pre-test',
     'test',
@@ -80,14 +76,14 @@ gulp.task('watcher-testSrc', function(callback) {
   );
 });
 
-gulp.task('watch', function(callback) {
+gulp.task('watch', (callback) => {
   gulp.watch(appSrc, ['watcher-appSrc']);
   gulp.watch(testSrc, ['watcher-testSrc']);
   callback();
 });
 
 // CI
-gulp.task('default', function(callback) {
+gulp.task('default', (callback) => {
   runSequence(
     ['compile', 'lint'],
     'pre-test',
@@ -98,7 +94,7 @@ gulp.task('default', function(callback) {
   );});
 
 // develop
-gulp.task('dev', function(callback) {
+gulp.task('dev', (callback) => {
   runSequence(
     'compile',
     'pre-test',
@@ -110,7 +106,7 @@ gulp.task('dev', function(callback) {
 });
 
 // run server
-gulp.task('run', function(callback) {
+gulp.task('run', (callback) => {
   runSequence(
     'compile',
     'serve',
