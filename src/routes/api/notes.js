@@ -5,6 +5,105 @@ import Note from '../../models/note';
 
 const notes = new Router();
 
+/* Method:
+ *   GET /api/:user_id/notes
+ *
+ * Request
+ *   header:
+ *     x-access-token: <token>
+ *
+ * Response:
+ * on Success
+ *   status: 200
+ *   body:
+ *   {
+ *      success: true,
+ *      nodeList:[note]
+ *   }
+ *
+ *   POST /api/:user_id/notes/:note_id
+ *
+ * Request
+ *   header:
+ *     x-access-token: <token>
+ *   body:
+ *   {
+ *      id: <noteId>,
+ *      title: <noteTitle>,
+ *      date: <noteDate>,
+ *      tags: <[noteTag]>,
+ *      body: <noteBody>
+ *   }
+ *
+ * Response:
+ * on Success
+ *   status: 201
+ *   body:
+ *   {
+ *      success: true
+ *   }
+ * on failed(noteId conflict)
+ *   status: 409
+ *   body:{
+ *     success: false,
+ *     message: <error info>
+ *   }
+ *
+ *   PATCH /api/:user_id/notes/:note_id
+ *
+ * Request
+ *   header:
+ *     x-access-token: <token>
+ *   body:
+ *   {
+ *      title: <noteTitle>,
+ *      date: <noteDate>,
+ *      tags: <[noteTag]>,
+ *      body: <noteBody>
+ *   }
+ *
+ * Response:
+ * on Success
+ *   status: 200
+ *   body:
+ *   {
+ *      success: true,
+ *      message: <success message>
+ *   }
+ *
+ *
+ *   DELETE /api/:user_id/notes/:note_id
+ *
+ * Request
+ *   header:
+ *     x-access-token: <token>
+ *
+ * Response:
+ * on Success
+ *   status: 204
+ *
+ *   GET /api/:user_id/notes/:note_id
+ *
+ * Request
+ *   header:
+ *     x-access-token: <token>
+ *
+ * Response:
+ * on Success
+ *   status: 200
+ *   body:
+ *   {
+ *      success: true,
+ *      note: note
+ *   }
+ * on failed(nonexist note)
+ *   status: 404
+ *   body:
+ *   {
+ *      success: false
+ *   }
+ */
+
 notes.get('/', (req, res) => {
   const owner = req.decoded.id;
   Note
