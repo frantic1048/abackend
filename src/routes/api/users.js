@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import logger from '../../logger';
-import hash from '../../hash';
+import { hash, verify } from '../../secure';
 import User from '../../models/user';
 import notes from './notes';
 import verifyToken from '../../middlewares/verifyToken';
@@ -17,14 +17,16 @@ users.get('/:user_id', verifyToken, (req, res) => {
 users.patch('/:user_id', verifyToken, (req, res) => {
   // update password
   const userId = req.params.user_id;
-  const oldPassword = hash(`${userId}${req.body.password}`);
-  const newPassword = hash(`${userId}${req.body.newPassword}`);
+  const oldPassword = `${userId}${req.body.password}`;
+  const newPassword = `${userId}${req.body.newPassword}`;
   User.findOne({
     id: userId,
   }, (err, user) => {
-    if (user.password === oldPassword) {
+    if (verify(oldPassword, user.key, user.salt)) {
       // right old password, update to the new
-      user.password = newPassword;
+      const newPass = hash(newPassword);
+      user.key = newPass.key;
+      user.salt = newPass.salt;
       user.save(() => {
         res.status(200).json({
           success: true,
@@ -46,11 +48,11 @@ users.delete('/:user_id', verifyToken, (req, res) => {
   logger.info(req.params);
   logger.info(req.body.password);
   const userId = req.params.user_id;
-  const password = hash(`${userId}${req.body.password}`);
+  const password = `${userId}${req.body.password}`;
   User.findOne({
     id: userId,
   }, (err, user) => {
-    if (password === user.password) {
+    if (verify(password, user.key, user.salt)) {
       user.remove(() => {
         res.status(204).json({
           success: true,

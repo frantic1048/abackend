@@ -2,7 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 
 import logger from '../../logger';
-import hash from '../../hash';
+import { verify } from '../../secure';
 import User from '../../models/user';
 import { secret } from '../../../abackend.conf';
 
@@ -47,7 +47,7 @@ authenticate.post('/', (req, res) => {
       });
     } else if (user) {
       // user exist
-      if (user.password !== hash(`${req.body.id}${req.body.password}`)) {
+      if (!verify(`${req.body.id}${req.body.password}`, user.key, user.salt)) {
         // wrong password
         logger.error(`Authentication failed. Wrong password.`);
         res.status(401).json({

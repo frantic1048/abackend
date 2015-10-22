@@ -1,6 +1,6 @@
 {
   "name": "abackend",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "a web API backend for a homework",
   "main": "build/server.js",
   "scripts": {
