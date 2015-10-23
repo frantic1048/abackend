@@ -32,7 +32,7 @@ npm install
 
 编辑 `abackend.conf.js`。文件中有相应注释。
 
-## 执行测试
+## 测试
 
 **在 `abackend.conf.js` 启用 `dev` 选项（置其值为 `true`）。**
 
@@ -74,15 +74,11 @@ git pull
 
 # API
 
-## 用户注册
+## /api/registration
 
-### 方法
+### POST：注册新用户
 
-```
-POST /api/registration
-```
-
-### 请求
+#### 请求
 
 请求体（JSON 格式）：
 
@@ -94,9 +90,9 @@ POST /api/registration
 }
 ```
 
-### 响应
+#### 响应
 
-#### 注册成功：
+##### 注册成功：
 
 HTTP 状态码：`201 Created`
 
@@ -108,7 +104,7 @@ HTTP 状态码：`201 Created`
 }
 ```
 
-#### 注册失败：
+##### 注册失败：
 
 - 用户名已存在：`409 Conflict`
 - 非法用户名：`422 Unprocessable Entity`
@@ -122,15 +118,16 @@ HTTP 状态码：`201 Created`
 }
 ```
 
-## 用户验证
+## /api/users/:user\_id
 
-### 方法
+### PATCH：改密码
+### DELETE：删除账户
 
-```
-POST /api/authentication
-```
+## /api/authentication
 
-### 请求
+### POST：认证
+
+#### 请求
 
 请求体（JSON 格式）：
 
@@ -141,9 +138,9 @@ POST /api/authentication
 }
 ```
 
-### 响应
+#### 响应
 
-#### 验证成功
+##### 验证成功
 
 HTTP 状态码：`200 OK`
 
@@ -156,7 +153,7 @@ HTTP 状态码：`200 OK`
 }
 ```
 
-#### 验证失败
+##### 验证失败
 
 - 用户不存在：`401 Unauthorized`
 - 密码错误：`401 Unauthorized`
@@ -170,4 +167,35 @@ HTTP 状态码：`200 OK`
 }
 ```
 
-后续待填坑。
+## /api/users/:user\_id/notes
+
+### GET：获取记事列表
+
+#### 请求
+#### 响应
+
+## /api/users/:user\_id/notes/:note\_id
+
+### POST：创建新记事
+
+#### 请求
+
+#### 响应
+
+### PATCH：更新已有记事
+
+#### 请求
+
+#### 响应
+
+### GET：获取记事
+
+#### 请求
+
+#### 响应
+
+### DELETE：删除记事
+
+#### 请求
+
+#### 响应
