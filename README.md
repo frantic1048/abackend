@@ -92,7 +92,7 @@ git pull
 
 #### 响应
 
-##### 注册成功：
+##### 注册成功
 
 HTTP 状态码：`201 Created`
 
@@ -104,7 +104,7 @@ HTTP 状态码：`201 Created`
 }
 ```
 
-##### 注册失败：
+##### 注册失败
 
 - 用户名已存在：`409 Conflict`
 - 非法用户名：`422 Unprocessable Entity`
@@ -117,11 +117,6 @@ HTTP 状态码：`201 Created`
   "message": "<error info>"
 }
 ```
-
-## /api/users/:user\_id
-
-### PATCH：改密码
-### DELETE：删除账户
 
 ## /api/authentication
 
@@ -153,6 +148,8 @@ HTTP 状态码：`200 OK`
 }
 ```
 
+响应中的 `<access token>` 在后面的 API 有多次用到，以 `token` 指带。
+
 ##### 验证失败
 
 - 用户不存在：`401 Unauthorized`
@@ -167,12 +164,119 @@ HTTP 状态码：`200 OK`
 }
 ```
 
+## /api/users/:user\_id
+
+### PATCH：改密码
+
+#### 请求
+
+请求头：
+
+```
+x-access-token：<token>
+```
+
+token 指通过 `POST /api/authentication`  认证之后在响应体中获得的 token 的内容。
+
+请求体（JSON 格式）：
+
+```json
+{
+  "password": "<password>",
+  "newPassword": "<newPassword>"
+}
+```
+
+#### 响应
+
+##### 成功
+
+HTTP 状态码：`200 OK`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": true
+}
+```
+
+##### 失败
+
+HTTP 状态码：`401 Unauthorized`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": false,
+  "message": "<error info>"
+}
+```
+
+### DELETE：删除账户
+
+#### 请求
+
+请求头：
+
+```
+x-access-token：<token>
+```
+
+请求体（JSON 格式）：
+
+```json
+{
+   "password": <"password">
+}
+```
+
+#### 响应
+
+##### 成功
+
+HTTP 状态码：`204 No Content`
+
+##### 失败（密码错误）
+
+HTTP 状态码：`401 Unauthorized`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": false,
+  "message": <"error info">
+}
+```
+
 ## /api/users/:user\_id/notes
 
 ### GET：获取记事列表
 
 #### 请求
+
+请求头：
+
+```
+x-access-token：<token>
+```
+
 #### 响应
+
+##### 成功
+
+HTTP 状态码：`200 OK`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": true,
+  "noteList": [note]
+}
+```
 
 ## /api/users/:user\_id/notes/:note\_id
 
@@ -180,22 +284,144 @@ HTTP 状态码：`200 OK`
 
 #### 请求
 
+请求头：
+
+```
+x-access-token：<token>
+```
+
+请求体（JSON 格式）：
+
+```json
+{
+  "id": "<noteId>",
+  "title": "<noteTitle>",
+  "date": <"noteDate">,
+  "tags": <["noteTag"]>,
+  "body": <"noteBody">
+}
+```
+
+id 是对于单个用户的记事的唯一识别符（字符串），同一个用户不会拥有两个 id 相同的记事。
+
+noteDate 是表示日期的字符串，遵循 [ECMA-262](http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15) 中规定的格式。
+
+在其后获取记事相关的 API 中，返回的记事对象的格式与此请求结构一致。
+
 #### 响应
+
+##### 成功
+
+HTTP 状态码：`201 Created`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": true
+}
+```
+
+##### 失败
+
+- noteId 已存在：`409 Conflict`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": false,
+  "message": <error info>
+}
+```
 
 ### PATCH：更新已有记事
 
 #### 请求
 
+请求头：
+
+```
+x-access-token：<token>
+```
+
+请求体（JSON 格式）：
+
+仅填充需要更新的记事属性即可。
+
+```json
+{
+  "title": <"noteTitle">,
+  "date": <"noteDate">,
+  "tags": <["noteTag"]>,
+  "body": <"noteBody">
+}
+```
+
 #### 响应
+
+##### 成功
+
+HTTP 状态码：`200 OK`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": true
+}
+```
 
 ### GET：获取记事
 
 #### 请求
 
+请求头：
+
+```
+x-access-token：<token>
+```
+
 #### 响应
+
+##### 成功
+
+HTTP 状态码：`200 OK`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": true,
+  "note": <note>
+}
+```
+
+##### 失败（笔记不存在）
+
+HTTP 状态码：`404 Not Found`
+
+响应体（JSON 格式）：
+
+```json
+{
+  "success": false
+}
+```
+
 
 ### DELETE：删除记事
 
 #### 请求
 
+请求头：
+
+```
+x-access-token：<token>
+```
+
 #### 响应
+
+##### 成功
+
+HTTP 状态码：`204 No Content`
