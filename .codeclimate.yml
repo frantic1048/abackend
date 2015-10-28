@@ -31,7 +31,7 @@ ratings:
   paths:
   - src/**/*.js
   - test/spec/*Spec.js
-  - gulpfile.js
+  - gulpfile.babel.js
   - abackend.conf.js
 #   - lib/**
 #   - "**.rb"
