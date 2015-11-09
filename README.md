@@ -144,6 +144,8 @@ HTTP 状态码：`200 OK`
 ```json
 {
   "success": true,
+  "id": "<userid>",
+  "name": "<username>",
   "token": "<access token>"
 }
 ```
@@ -228,7 +230,7 @@ x-access-token：<token>
 
 ```json
 {
-   "password": <"password">
+   "password": "<password>"
 }
 ```
 
@@ -247,7 +249,7 @@ HTTP 状态码：`401 Unauthorized`
 ```json
 {
   "success": false,
-  "message": <"error info">
+  "message": "<error info>"
 }
 ```
 
@@ -296,9 +298,9 @@ x-access-token：<token>
 {
   "id": "<noteId>",
   "title": "<noteTitle>",
-  "date": <"noteDate">,
-  "tags": <["noteTag"]>,
-  "body": <"noteBody">
+  "date": "<noteDate>",
+  "tags": ["noteTag"],
+  "body": "<noteBody>"
 }
 ```
 
@@ -331,7 +333,7 @@ HTTP 状态码：`201 Created`
 ```json
 {
   "success": false,
-  "message": <error info>
+  "message": "<error info>"
 }
 ```
 
@@ -351,10 +353,10 @@ x-access-token：<token>
 
 ```json
 {
-  "title": <"noteTitle">,
-  "date": <"noteDate">,
-  "tags": <["noteTag"]>,
-  "body": <"noteBody">
+  "title": "<noteTitle>",
+  "date": "<noteDate>",
+  "tags": ["noteTag"],
+  "body": "<noteBody>"
 }
 ```
 

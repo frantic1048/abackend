@@ -367,6 +367,8 @@ describe('Authentication:', function() {
         .post('/authentication')
         .expectStatus(200)
         .expectValue('success', true)
+        .expectValue('id', goodUser.id)
+        .expectValue('name', goodUser.name)
         .end(function(err, res, body) {
           if (err) done.fail(err);
           else {

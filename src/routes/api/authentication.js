@@ -24,6 +24,8 @@ const authenticate = new Router();
  *   body:
  *   {
  *      success: true,
+ *      id: <userid>,
+ *      name: <username>,
  *      token: <access token>
  *   }
  * on failed
@@ -63,6 +65,8 @@ authenticate.post('/', (req, res) => {
         res.status(200).json({
           success: true,
           message: "Here's your token!",
+          id: user.id,
+          name: user.name,
           token: token,
         });
       }

@@ -172,7 +172,7 @@ notes.patch('/:note_id', (req, res) => {
         message: 'Update success!',
       });
     }
-    // TODO: May need more err handling here
+    // PLANNING: May need more err handling here
   });
 });
 
@@ -188,7 +188,7 @@ notes.delete('/:note_id', (req, res) => {
       logger.warn('deleted a Note');
       res.status(204).send();
     }
-    // TODO: May need more err handling here
+    // PLANNING: May need more err handling here
   });
 });
 
