@@ -1,6 +1,6 @@
 {
   "name": "abackend",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "a web API backend for a homework",
   "main": "build/server.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "gulp-eslint": "^1.0.0",
     "gulp-istanbul": "^0.10.1",
     "gulp-jasmine": "^2.1.0",
-    "gulp-newer": "^0.5.1",
+    "gulp-newer": "^1.0.0",
     "hippie": "^0.4.0",
     "jasmine-spec-reporter": "^2.4.0"
   },
